@@ -1,10 +1,10 @@
-# fly.toml app configuration file generated for teste-backend on 2024-03-06T20:31:57+09:00
+# fly.toml app configuration file generated for teste-backend on 2024-03-07T21:22:15+09:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
 app = 'teste-backend'
-primary_region = 'sin'
+primary_region = 'nrt'
 
 [build]
 
@@ -17,6 +17,4 @@ primary_region = 'sin'
   processes = ['app']
 
 [[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
-  cpus = 1
+  size = 'shared-cpu-1x'

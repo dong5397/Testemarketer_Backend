@@ -4,11 +4,18 @@ import cors from "cors";
 import multer from "multer";
 
 const { Pool } = pkg;
-
+// Postgres cluster teste-backend-db created
+//   Username:    postgres
+//   Password:    R1qwK1IOr16Aysa
+//   Hostname:    teste-backend-db.internal
+//   Flycast:     fdaa:5:35ca:0:1::24
+//   Proxy port:  5432
+//   Postgres port:  5433
+//   Connection string: postgres://postgres:R1qwK1IOr16Aysa@teste-backend-db.flycast:5432
 const pool = new Pool({
   user: "postgres",
-  password: "5dNsHSzJJpVuObC",
-  host: "testebend.internal",
+  password: "R1qwK1IOr16Aysa",
+  host: "teste-backend-db.internal",
   database: "postgres",
   port: 5432,
 });
@@ -108,13 +115,19 @@ app.post("/api/v1/reviews", async (req, res) => {
   }
 });
 
-// 사용자 정보 조회
-app.get("/api/v1/users/:user_id", async (req, res) => {
+// 리뷰 수정
+app.put("/api/v1/reviews/:review_id", async (req, res) => {
   try {
-    const { user_id } = req.params;
+    const { review_id } = req.params;
+    const { restaurant_id, review_text, review_date, user_id } = req.body;
     const { rows } = await pool.query(
-      "SELECT * FROM users WHERE user_id = $1",
-      [user_id]
+      `
+      UPDATE reviews 
+      SET restaurant_id = $1, review_text = $2, review_date = $3, user_id = $4
+      WHERE id = $5
+      RETURNING *
+      `,
+      [restaurant_id, review_text, review_date, user_id, review_id]
     );
     res.json({
       resultCode: "S-1",
@@ -130,16 +143,48 @@ app.get("/api/v1/users/:user_id", async (req, res) => {
   }
 });
 
-// 식당 별점 순 상위 10개 조회
-app.get("/api/v1/restaurants/top", async (req, res) => {
+//리뷰삭제
+app.delete("/api/v1/reviews/:review_id", async (req, res) => {
   try {
+    const { review_id } = req.params;
     const { rows } = await pool.query(
-      "SELECT * FROM restaurants ORDER BY rating DESC LIMIT 10"
+      "DELETE FROM reviews WHERE id = $1 RETURNING *",
+      [review_id]
+    );
+
+    if (rows.length > 0) {
+      res.json({
+        resultCode: "S-1",
+        msg: "성공",
+        data: rows[0],
+      });
+    } else {
+      res.status(404).json({
+        resultCode: "F-1",
+        msg: "해당 리뷰를 찾을 수 없습니다.",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      resultCode: "F-1",
+      msg: "에러 발생",
+    });
+  }
+});
+
+// 사용자 정보 조회
+app.get("/api/v1/users/:user_id", async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const { rows } = await pool.query(
+      "SELECT * FROM users WHERE user_id = $1",
+      [user_id]
     );
     res.json({
       resultCode: "S-1",
       msg: "성공",
-      data: rows,
+      data: rows[0],
     });
   } catch (error) {
     console.error(error);
@@ -193,51 +238,6 @@ app.get("/api/v1/restaurants/:restaurant_id/reviews", async (req, res) => {
     });
   }
 });
-
-// POST: 식당 등록 및 이미지 업로드
-app.post(
-  "/api/v1/restaurants",
-  upload.single("image"),
-  async (req, res, next) => {
-    try {
-      const {
-        restaurants_name,
-        address,
-        phone,
-        opening_hours,
-        rating,
-        taste_level,
-      } = req.body;
-      const image = req.file.path;
-      const { rows } = await pool.query(
-        "INSERT INTO restaurants (restaurants_name, address, phone, opening_hours, rating, taste_level, image) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-        [
-          restaurants_name,
-          address,
-          phone,
-          opening_hours,
-          rating,
-          taste_level,
-          image,
-        ]
-      );
-      res.status(201).json({
-        resultCode: "S-1",
-        msg: "성공",
-        data: rows[0],
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({
-        resultCode: "F-1",
-        msg: "에러 발생",
-      });
-    }
-  }
-);
-
-// 이미지 파일 제공
-app.use("/uploads", express.static("uploads"));
 
 const port = 3000;
 app.listen(port, () => {
