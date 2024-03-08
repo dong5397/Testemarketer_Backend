@@ -30,17 +30,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// 이미지 업로드를 위한 설정
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, new Date().toISOString() + file.originalname);
-  },
-});
-const upload = multer({ storage: storage });
-
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
