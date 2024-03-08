@@ -1,7 +1,6 @@
 import express from "express";
 import pkg from "pg";
 import cors from "cors";
-import multer from "multer";
 
 const { Pool } = pkg;
 // Postgres cluster testebackenddb created
@@ -24,7 +23,7 @@ const app = express();
 
 app.use(express.json());
 const corsOptions = {
-  origin: "https://cdpn.io",
+  origin: "http://localhost:5173",
   optionsSuccessStatus: 200,
 };
 
