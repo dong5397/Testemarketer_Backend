@@ -4,18 +4,18 @@ import cors from "cors";
 import multer from "multer";
 
 const { Pool } = pkg;
-// Postgres cluster teste-backend-db created
+// Postgres cluster testebackenddb created
 //   Username:    postgres
-//   Password:    R1qwK1IOr16Aysa
-//   Hostname:    teste-backend-db.internal
-//   Flycast:     fdaa:5:35ca:0:1::24
+//   Password:    qAEltfF1IbsOPMx
+//   Hostname:    testebackenddb.internal
+//   Flycast:     fdaa:5:35ca:0:1::25
 //   Proxy port:  5432
 //   Postgres port:  5433
-//   Connection string: postgres://postgres:R1qwK1IOr16Aysa@teste-backend-db.flycast:5432
+//   Connection string: postgres://postgres:qAEltfF1IbsOPMx@testebackenddb.flycast:5432
 const pool = new Pool({
   user: "postgres",
-  password: "R1qwK1IOr16Aysa",
-  host: "teste-backend-db.internal",
+  password: "qAEltfF1IbsOPMx",
+  host: "testebackenddb.internal",
   database: "postgres",
   port: 5432,
 });

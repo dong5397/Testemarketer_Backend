@@ -40,3 +40,8 @@ CREATE TABLE comments (
 	user_id INT NOT NULL REFERENCES users(user_id),
 	post_id INT NOT NULL REFERENCES posts(post_id)
 );
+
+
+INSERT INTO restaurants (restaurants_name, address, phone, opening_hours, rating, taste_level, image)
+VALUES ('대전 성심당', '대전광역시 중구', '042-1234-5678', '07:00 - 22:00', 4.8, 5, 'https://photos.google.com/photo/AF1QipPBvjBzhx8VrhM_pNTLWCUlNeLlNQa933Tc88gI');
+
