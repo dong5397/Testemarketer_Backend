@@ -50,6 +50,27 @@ app.get("/api/v1/restaurants", async (req, res) => {
     });
   }
 });
+// 식당 단건 조회
+app.get("/api/v1/restaurants/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { rows } = await pool.query(
+      "SELECT * FROM Restaurant WHERE id = $1",
+      [id]
+    );
+    res.json({
+      resultCode: "S-1",
+      msg: "성공",
+      data: rows[0],
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      resultCode: "F-1",
+      msg: "에러 발생",
+    });
+  }
+});
 
 // 사용자 정보 생성
 app.post("/api/v1/users", async (req, res) => {
