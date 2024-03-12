@@ -55,7 +55,7 @@ app.get("/api/v1/restaurants/:restaurants_id", async (req, res) => {
   try {
     const id = req.params.restaurants_id;
     const { rows } = await pool.query(
-      "SELECT * FROM Restaurant WHERE restaurants_id = $1",
+      "SELECT * FROM restaurant WHERE restaurants_id = $1",
       [id]
     );
     res.json({
