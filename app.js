@@ -51,9 +51,9 @@ app.get("/api/v1/restaurants", async (req, res) => {
   }
 });
 // 식당 단건 조회
-app.get("/api/v1/restaurants/:id", async (req, res) => {
+app.get("/api/v1/restaurants/:restaurants_id", async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.params.restaurants_id;
     const { rows } = await pool.query(
       "SELECT * FROM Restaurant WHERE restaurants_id = $1",
       [id]
