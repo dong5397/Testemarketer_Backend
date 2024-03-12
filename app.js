@@ -55,7 +55,7 @@ app.get("/api/v1/restaurants/:restaurants_id", async (req, res) => {
   try {
     const id = req.params.restaurants_id;
     const { rows } = await pool.query(
-      "SELECT * FROM restaurant WHERE restaurants_id = $1",
+      "SELECT * FROM restaurants WHERE restaurants_id = $1",
       [id]
     );
     res.json({
@@ -98,13 +98,12 @@ app.post("/api/v1/users", async (req, res) => {
   }
 });
 
-// 리뷰 생성
 app.post("/api/v1/reviews", async (req, res) => {
   try {
-    const { restaurant_id, review_text, review_date, user_id } = req.body;
+    const { restaurant_id, review_text, review_date, user_id } = req.body; // 여기서 restaurants_id가 아닌 restaurant_id로 수정
     const { rows } = await pool.query(
       `
-      INSERT INTO reviews (restaurant_id, review_text, review_date, user_id)
+      INSERT INTO reviews (restaurant_id, review_text, review_date, user_id) // 여기서도 restaurants_id가 아닌 restaurant_id로 수정
       VALUES ($1, $2, $3, $4)
       RETURNING *
       `,
@@ -128,7 +127,7 @@ app.post("/api/v1/reviews", async (req, res) => {
 app.put("/api/v1/reviews/:review_id", async (req, res) => {
   try {
     const { review_id } = req.params;
-    const { restaurant_id, review_text, review_date, user_id } = req.body;
+    const { restaurant_id, review_text, review_date, user_id } = req.body; // 여기서 restaurants_id가 아닌 restaurant_id로 수정
     const { rows } = await pool.query(
       `
       UPDATE reviews 
@@ -229,7 +228,7 @@ app.get("/api/v1/users/:user_id/reviews", async (req, res) => {
 // 특정 식당의 리뷰 목록 조회
 app.get("/api/v1/restaurants/:restaurant_id/reviews", async (req, res) => {
   try {
-    const { restaurant_id } = req.params;
+    const { restaurant_id } = req.params; // 여기서 restaurants_id가 아닌 restaurant_id로 수정
     const { rows } = await pool.query(
       "SELECT * FROM reviews WHERE restaurant_id = $1",
       [restaurant_id]
@@ -247,7 +246,6 @@ app.get("/api/v1/restaurants/:restaurant_id/reviews", async (req, res) => {
     });
   }
 });
-
 const port = 3000;
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

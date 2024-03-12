@@ -21,10 +21,11 @@ CREATE TABLE restaurants (
 CREATE TABLE reviews (
    id SERIAL PRIMARY KEY,
    restaurant_id INT NOT NULL REFERENCES restaurants(restaurants_id),
-   review_text CHAR(200) NOT NULL,
-   review_date CHAR(100) NOT NULL,
+   review_text VARCHAR(200) NOT NULL,
+   review_date DATE NOT NULL,
    user_id INT NOT NULL REFERENCES users(user_id)
 );
+
 
 CREATE TABLE posts (
    post_id SERIAL PRIMARY KEY,
