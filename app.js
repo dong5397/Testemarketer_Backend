@@ -97,13 +97,71 @@ app.post("/api/v1/users", async (req, res) => {
     });
   }
 });
+// 토큰
+app.get("sign_token", (req, res) => {
+  let token = jwt.sign(
+    { name: "sancho", exp: parseInt(Date.now() / 1000) + 10 },
+    KEY
+  ); // 만료기간 10초
+  res.json({ token });
+});
 
+app.get("/api/v1/check_token", (req, res) => {
+  let token = req.headers["token"];
+  try {
+    let payload = jwt.verify(token, KEY);
+    console.log("토큰 인증 성공", payload);
+    res.json({ msg: "success" });
+  } catch (err) {
+    console.log("인증 에러");
+    res.status(405).json({ msg: "error" });
+    next(err);
+  }
+});
+
+// 로그인 처리 엔드포인트
+app.post("/api/v1/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // 제공된 이메일로 사용자를 데이터베이스에서 찾습니다.
+    const { rows } = await pool.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
+
+    // 사용자가 존재하고 비밀번호가 일치하는지 확인합니다.
+    if (rows.length > 0 && rows[0].password === password) {
+      // 사용자 정보가 일치하면 토큰 생성
+      const token = jwt.sign({ email: email }, "your_secret_key");
+      res.json({
+        resultCode: "S-1",
+        msg: "로그인 성공",
+        token: token,
+        data: { userName: rows[0].username }, // 사용자 이름 반환
+      });
+    } else {
+      // 사용자가 존재하지 않거나 비밀번호가 일치하지 않는 경우 에러 응답
+      res.status(401).json({
+        resultCode: "F-1",
+        msg: "이메일 또는 비밀번호가 올바르지 않습니다.",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      resultCode: "F-1",
+      msg: "에러 발생",
+    });
+  }
+});
+
+//리뷰 생성
 app.post("/api/v1/reviews", async (req, res) => {
   try {
-    const { restaurant_id, review_text, review_date, user_id } = req.body; // 여기서 restaurants_id가 아닌 restaurant_id로 수정
+    const { restaurant_id, review_text, review_date, user_id } = req.body; // 정확히 수정하셨네요!
     const { rows } = await pool.query(
       `
-      INSERT INTO reviews (restaurant_id, review_text, review_date, user_id) // 여기서도 restaurants_id가 아닌 restaurant_id로 수정
+      INSERT INTO reviews (restaurant_id, review_text, review_date, user_id) 
       VALUES ($1, $2, $3, $4)
       RETURNING *
       `,
