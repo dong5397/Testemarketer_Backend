@@ -246,7 +246,7 @@ app.get("/api/v1/userscheck/", async (req, res) => {
     res.json({
       resultCode: "S-1",
       msg: "성공",
-      data: rows[0],
+      data: rows,
     });
   } catch (error) {
     console.error(error);
