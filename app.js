@@ -28,7 +28,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
+const KEY = "your_secret_key"; // 보안 키
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
@@ -98,7 +98,7 @@ app.post("/api/v1/users", async (req, res) => {
   }
 });
 // 토큰
-app.get("sign_token", (req, res) => {
+app.get("/sign_token", (req, res) => {
   let token = jwt.sign(
     { name: "sancho", exp: parseInt(Date.now() / 1000) + 10 },
     KEY
@@ -156,12 +156,13 @@ app.post("/api/v1/login", async (req, res) => {
 });
 
 //리뷰 생성
+
 app.post("/api/v1/reviews", async (req, res) => {
   try {
-    const { restaurant_id, review_text, review_date, user_id } = req.body; // 정확히 수정하셨네요!
+    const { restaurant_id, review_text, review_date, user_id } = req.body; // 여기서 restaurants_id가 아닌 restaurant_id로 수정
     const { rows } = await pool.query(
       `
-      INSERT INTO reviews (restaurant_id, review_text, review_date, user_id) 
+      INSERT INTO reviews (restaurant_id, review_text, review_date, user_id) // 여기서도 restaurants_id가 아닌 restaurant_id로 수정
       VALUES ($1, $2, $3, $4)
       RETURNING *
       `,
@@ -239,26 +240,8 @@ app.delete("/api/v1/reviews/:review_id", async (req, res) => {
   }
 });
 
-// 모든 사용자 정보 조회
-app.get("/api/v1/userscheck/", async (req, res) => {
-  try {
-    const { rows } = await pool.query("SELECT * FROM users");
-    res.json({
-      resultCode: "S-1",
-      msg: "성공",
-      data: rows,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      resultCode: "F-1",
-      msg: "에러 발생",
-    });
-  }
-});
-
-// 특정 사용자 정보 조회
-app.get("/api/v1/userscheck/:user_id", async (req, res) => {
+// 사용자 정보 조회
+app.get("/api/v1/users/:user_id", async (req, res) => {
   try {
     const { user_id } = req.params;
     const { rows } = await pool.query(
