@@ -239,7 +239,25 @@ app.delete("/api/v1/reviews/:review_id", async (req, res) => {
   }
 });
 
-// 사용자 정보 조회
+// 모든 사용자 정보 조회
+app.get("/api/v1/users/", async (req, res) => {
+  try {
+    const { rows } = await pool.query("SELECT * FROM users");
+    res.json({
+      resultCode: "S-1",
+      msg: "성공",
+      data: rows[0],
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      resultCode: "F-1",
+      msg: "에러 발생",
+    });
+  }
+});
+
+// 특정 사용자 정보 조회
 app.get("/api/v1/users/:user_id", async (req, res) => {
   try {
     const { user_id } = req.params;
