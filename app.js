@@ -240,7 +240,7 @@ app.delete("/api/v1/reviews/:review_id", async (req, res) => {
 });
 
 // 모든 사용자 정보 조회
-app.get("/api/v1/users/", async (req, res) => {
+app.get("/api/v1/userscheck/", async (req, res) => {
   try {
     const { rows } = await pool.query("SELECT * FROM users");
     res.json({
@@ -258,7 +258,7 @@ app.get("/api/v1/users/", async (req, res) => {
 });
 
 // 특정 사용자 정보 조회
-app.get("/api/v1/users/:user_id", async (req, res) => {
+app.get("/api/v1/userscheck/:user_id", async (req, res) => {
   try {
     const { user_id } = req.params;
     const { rows } = await pool.query(
