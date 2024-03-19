@@ -3,6 +3,7 @@ import { pool } from "../../../app.js";
 const restrs = async (req, res) => {
   try {
     const { rows } = await pool.query("SELECT * FROM restaurants");
+    console.log(rows);
     res.json({
       resultCode: "S-1",
       msg: "성공",
