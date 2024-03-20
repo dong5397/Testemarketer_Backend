@@ -24,6 +24,23 @@ const makeuser = async (req, res) => {
   }
 };
 
+const selectusers = async (req, res) => {
+  try {
+    const { rows } = await pool.query("SELECT * FROM users");
+    res.json({
+      resultCode: "S-1",
+      msg: "성공",
+      data: rows,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      resultCode: "F-1",
+      msg: "에러 발생",
+    });
+  }
+};
+
 const selectuser = async (req, res) => {
   try {
     const { user_id } = req.params;
@@ -47,5 +64,6 @@ const selectuser = async (req, res) => {
 
 export default {
   makeuser,
+  selectusers,
   selectuser,
 };

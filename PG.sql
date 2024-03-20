@@ -29,6 +29,10 @@ CREATE TABLE reviews (
    user_id INT NOT NULL REFERENCES users(user_id)
 );
 
+-- restrants-> restrant
+ALTER TABLE reviews
+RENAME COLUMN restaurants_id TO restaurant_id;
+
 -- posts 테이블 생성
 CREATE TABLE posts (
    post_id SERIAL PRIMARY KEY,

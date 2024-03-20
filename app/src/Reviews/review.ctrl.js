@@ -1,14 +1,14 @@
 import { pool } from "../../../app.js";
 const createreview = async (req, res) => {
   try {
-    const { restaurant_id, review_text, review_date, user_id } = req.body; // 여기서 restaurants_id가 아닌 restaurant_id로 수정
+    const { restaurants_id, review_text, user_id } = req.body;
     const { rows } = await pool.query(
       `
-        INSERT INTO reviews (restaurant_id, review_text, review_date, user_id) // 여기서도 restaurants_id가 아닌 restaurant_id로 수정
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO reviews (restaurants_id, review_text, review_date, user_id) 
+        VALUES ($1, $2, CURRENT_TIMESTAMP, $3)
         RETURNING *
         `,
-      [restaurant_id, review_text, review_date, user_id]
+      [restaurants_id, review_text, user_id]
     );
     res.json({
       resultCode: "S-1",
@@ -26,21 +26,21 @@ const createreview = async (req, res) => {
 
 const remotereview = async (req, res) => {
   try {
-    const { review_id } = req.params;
-    const { restaurant_id, review_text, review_date, user_id } = req.body; // 여기서 restaurants_id가 아닌 restaurant_id로 수정
+    const { id } = req.params;
+    const { restaurant_id, review_text, user_id } = req.body;
     const { rows } = await pool.query(
       `
         UPDATE reviews 
-        SET restaurant_id = $1, review_text = $2, review_date = $3, user_id = $4
+        SET restaurant_id = $1, review_text = $2, review_date = CURRENT_TIMESTAMP, user_id = $4
         WHERE id = $5
         RETURNING *
         `,
-      [restaurant_id, review_text, review_date, user_id, review_id]
+      [restaurant_id, review_text, user_id, id]
     );
     res.json({
       resultCode: "S-1",
       msg: "성공",
-      data: rows[0],
+      data: rows,
     });
   } catch (error) {
     console.error(error);

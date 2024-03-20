@@ -1,71 +1,68 @@
 import express from "express";
 import cors from "cors";
+import pkg from "pg";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+// 컨트롤러 임포트
 import loginCtrl from "./app/src/Login/login.ctrl.js";
 import restCtrl from "./app/src/restaurants/restaurants.ctrl.js";
 import reviewCtrl from "./app/src/Reviews/review.ctrl.js";
 import userCtrl from "./app/src/User/user.ctrl.js";
-import pkg from "pg";
-import jwt from "jsonwebtoken";
+import cookieParser from "cookie-parser";
+import userdata from "./controller/index.js";
 
 const { Pool } = pkg;
 
+//Postgres cluster marktertest created
+//Username:    postgres
+//Password:    WVcmob2Ci5EDmb6
+//Hostname:    marktertest.internal
+//Flycast:     fdaa:5:35c8:0:1::14
+//Proxy port:  5432
+//Postgres port:  5433
+//Connection string: postgres://postgres:WVcmob2Ci5EDmb6@marktertest.flycast:5432
 const pool = new Pool({
   user: "postgres",
-  password: "qAEltfF1IbsOPMx",
-  host: "testebackenddb.internal",
+  password: "WVcmob2Ci5EDmb6",
+  host: "marktertest.internal",
   database: "postgres",
   port: 5432,
 });
 
 const app = express();
+dotenv.config();
 
+// 기본 설정
 app.use(express.json());
-
-const corsOptions = {
-  origin: "http://localhost:5173",
-  optionsSuccessStatus: 200,
-};
-app.use(cors(corsOptions));
-
-// JWT 시크릿 키 설정
-const jwtSecretKey = "your_secret_key_here";
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
 
 // 로그인 처리 엔드포인트
-app.post("/api/v1/login", (req, res) => {
-  const { email, password } = req.body;
+app.post("/api/v1/login", userdata.login);
 
-  // 사용자 인증 로직 수행
-  // 로그인 성공 시 토큰 생성
-  const token = jwt.sign({ email }, jwtSecretKey, { expiresIn: "1h" });
-
-  // 클라이언트에게 토큰 전송
-  res.json({ token });
-});
-
-// JWT 검증 미들웨어
-function authenticateToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-  if (token == null) return res.sendStatus(401);
-
-  jwt.verify(token, jwtSecretKey, (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
-}
-
-// 예시: JWT를 사용하여 보호된 엔드포인트
-app.get("/api/v1/protected_resource", authenticateToken, (req, res) => {
-  // 인증된 사용자만 접근 가능한 리소스
-  res.json({ message: "인증 성공" });
-});
+app.get("/api/v1/accesstoken", userdata.accesstoken);
+app.get("/api/v1/refreshtoken", userdata.refreshToken);
+app.get("/api/v1/login/success", userdata.loginSuccess);
+app.post("/api/v1/logout", userdata.logout);
 
 // 예시: get 식당 정보 조회
 app.get("/api/v1/restaurants", restCtrl.restrs);
 
 // 예시: 식당 단건 조회
 app.get("/api/v1/restaurants/:restaurants_id", restCtrl.restr);
+
+// 예시: 사용자 정보 다건 조회
+app.get("/api/v1/users", userCtrl.selectusers);
+
+// 예시: 사용자 정보 단건 조회
+app.get("/api/v1/users/:user_id", userCtrl.selectuser);
 
 // 예시: 사용자 정보 생성
 app.post("/api/v1/users", userCtrl.makeuser);
@@ -79,9 +76,6 @@ app.put("/api/v1/reviews/:review_id", reviewCtrl.remotereview);
 // 예시: 리뷰 삭제
 app.delete("/api/v1/reviews/:review_id", reviewCtrl.deletereview);
 
-// 예시: 사용자 정보 조회
-app.get("/api/v1/users/:user_id", userCtrl.selectuser);
-
 // 예시: 사용자의 리뷰 목록 조회
 app.get("/api/v1/users/:user_id/reviews", reviewCtrl.userreview);
 
@@ -93,9 +87,8 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-const port = 3000;
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+app.listen(process.env.PORT, () => {
+  console.log(`listening on port ${process.env.PORT}`);
 });
 
 export { pool, jwt };
