@@ -5,12 +5,11 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
 // 컨트롤러 임포트
-import loginCtrl from "./app/src/Login/login.ctrl.js";
 import restCtrl from "./app/src/restaurants/restaurants.ctrl.js";
 import reviewCtrl from "./app/src/Reviews/review.ctrl.js";
 import userCtrl from "./app/src/User/user.ctrl.js";
 import cookieParser from "cookie-parser";
-import userdata from "./controller/index.js";
+import userdata from "./app/src/Login/login.ctrl.js";
 
 const { Pool } = pkg;
 
@@ -25,7 +24,7 @@ const { Pool } = pkg;
 const pool = new Pool({
   user: "postgres",
   password: "WVcmob2Ci5EDmb6",
-  host: "marktertest.internal",
+  host: "127.0.0.1",
   database: "postgres",
   port: 5432,
 });
