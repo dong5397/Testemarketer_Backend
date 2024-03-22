@@ -9,22 +9,23 @@ import restCtrl from "./app/src/restaurants/restaurants.ctrl.js";
 import reviewCtrl from "./app/src/Reviews/review.ctrl.js";
 import userCtrl from "./app/src/User/user.ctrl.js";
 import cookieParser from "cookie-parser";
-import userdata from "./app/src/Login/login.ctrl.js";
+import loginCtrl from "./app/src/Login/login.ctrl.js";
 
 const { Pool } = pkg;
-
-//Postgres cluster marktertest created
-//Username:    postgres
-//Password:    WVcmob2Ci5EDmb6
-//Hostname:    marktertest.internal
-//Flycast:     fdaa:5:35c8:0:1::14
-//Proxy port:  5432
-//Postgres port:  5433
-//Connection string: postgres://postgres:WVcmob2Ci5EDmb6@marktertest.flycast:5432
+/*
+Postgres cluster makterteste-db created
+  Username:    postgres
+  Password:    aETIPYoC5pUXfps
+  Hostname:    makterteste-db.internal
+  Flycast:     fdaa:5:35ca:0:1::27
+  Proxy port:  5432
+  Postgres port:  5433
+  Connection string: postgres://postgres:aETIPYoC5pUXfps@makterteste-db.flycast:5432
+  */
 const pool = new Pool({
   user: "postgres",
-  password: "WVcmob2Ci5EDmb6",
-  host: "127.0.0.1",
+  password: "aETIPYoC5pUXfps",
+  host: "makterteste-db.internal",
   database: "postgres",
   port: 5432,
 });
@@ -40,16 +41,16 @@ app.use(
     origin: "http://localhost:5173",
     methods: ["GET", "POST"],
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"], // 추가된 부분: 허용되는 헤더 목록
   })
 );
 
 // 로그인 처리 엔드포인트
-app.post("/api/v1/login", userdata.login);
-
-app.get("/api/v1/accesstoken", userdata.accesstoken);
-app.get("/api/v1/refreshtoken", userdata.refreshToken);
-app.get("/api/v1/login/success", userdata.loginSuccess);
-app.post("/api/v1/logout", userdata.logout);
+app.post("/api/v1/login", loginCtrl.login);
+app.get("/api/v1/accesstoken", loginCtrl.accesstoken);
+app.get("/api/v1/refreshtoken", loginCtrl.refreshToken);
+app.get("/api/v1/login/success", loginCtrl.loginSuccess);
+app.post("/api/v1/logout", loginCtrl.logout);
 
 // 예시: get 식당 정보 조회
 app.get("/api/v1/restaurants", restCtrl.restrs);
@@ -86,8 +87,9 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`listening on port ${process.env.PORT}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
 
 export { pool, jwt };

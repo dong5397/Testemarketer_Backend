@@ -33,6 +33,8 @@ CREATE TABLE reviews (
 ALTER TABLE reviews
 RENAME COLUMN restaurants_id TO restaurant_id;
 
+
+
 -- posts 테이블 생성
 CREATE TABLE posts (
    post_id SERIAL PRIMARY KEY,
@@ -63,6 +65,8 @@ WHERE restaurants_name = '대전 성심당';
 -- restaurants 테이블의 모든 데이터 조회
 SELECT * FROM restaurants;
 
+SELECT * FROM users where email = 'alsrl6678@naver.com';
+
 -- 테이블 삭제 (CASCADE 옵션을 사용하여 연관된 외래키를 가진 테이블도 함께 삭제)
 DROP TABLE comments CASCADE;
 DROP TABLE posts CASCADE;
@@ -71,4 +75,3 @@ DROP TABLE restaurants CASCADE;
 
 -- users 테이블 삭제 (IF EXISTS 옵션 사용하여 테이블이 존재하는 경우에만 삭제)
 DROP TABLE IF EXISTS users CASCADE;
-

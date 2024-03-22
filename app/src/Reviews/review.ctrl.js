@@ -1,4 +1,12 @@
-import { pool } from "../../../app.js";
+import pkg from "pg";
+const { Pool } = pkg;
+const pool = new Pool({
+  user: "postgres",
+  password: "aETIPYoC5pUXfps",
+  host: "makterteste-db.internal",
+  database: "postgres",
+  port: 5432,
+});
 const createreview = async (req, res) => {
   try {
     const { restaurants_id, review_text, user_id } = req.body;
