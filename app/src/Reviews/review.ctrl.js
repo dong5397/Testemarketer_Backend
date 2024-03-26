@@ -2,8 +2,8 @@ import pkg from "pg";
 const { Pool } = pkg;
 const pool = new Pool({
   user: "postgres",
-  password: "aETIPYoC5pUXfps",
-  host: "makterteste-db.internal",
+  password: "yQYWTHkupxcl4Sq",
+  host: "makterback2.internal",
   database: "postgres",
   port: 5432,
 });

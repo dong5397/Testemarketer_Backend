@@ -10,22 +10,23 @@ import reviewCtrl from "./app/src/Reviews/review.ctrl.js";
 import userCtrl from "./app/src/User/user.ctrl.js";
 import cookieParser from "cookie-parser";
 import loginCtrl from "./app/src/Login/login.ctrl.js";
+import validinfo from "./app/src/User/validinfo.js";
 
 const { Pool } = pkg;
-/*
-Postgres cluster makterteste-db created
+/* 
+Postgres cluster makterback2db created
   Username:    postgres
-  Password:    aETIPYoC5pUXfps
-  Hostname:    makterteste-db.internal
-  Flycast:     fdaa:5:35ca:0:1::27
+  Password:    1nX7mGNmv0HsbSZ
+  Hostname:    makterback2db.internal
+  Flycast:     fdaa:5:35c8:0:1::16
   Proxy port:  5432
   Postgres port:  5433
-  Connection string: postgres://postgres:aETIPYoC5pUXfps@makterteste-db.flycast:5432
-  */
+  Connection string: postgres://postgres:1nX7mGNmv0HsbSZ@makterback2db.flycast:5432
+*/
 const pool = new Pool({
   user: "postgres",
-  password: "aETIPYoC5pUXfps",
-  host: "makterteste-db.internal",
+  password: "1nX7mGNmv0HsbSZ",
+  host: "127.0.0.1",
   database: "postgres",
   port: 5432,
 });
@@ -46,7 +47,7 @@ app.use(
 );
 
 // 로그인 처리 엔드포인트
-app.post("/api/v1/login", loginCtrl.login);
+app.post("/api/v1/login", validinfo, loginCtrl.login);
 app.get("/api/v1/accesstoken", loginCtrl.accesstoken);
 app.get("/api/v1/refreshtoken", loginCtrl.refreshToken);
 app.get("/api/v1/login/success", loginCtrl.loginSuccess);
@@ -65,7 +66,7 @@ app.get("/api/v1/users", userCtrl.selectusers);
 app.get("/api/v1/users/:user_id", userCtrl.selectuser);
 
 // 예시: 사용자 정보 생성
-app.post("/api/v1/users", userCtrl.makeuser);
+app.post("/api/v1/register", validinfo, userCtrl.makeuser);
 
 // 예시: 리뷰 생성
 app.post("/api/v1/reviews", reviewCtrl.createreview);
@@ -82,7 +83,7 @@ app.get("/api/v1/users/:user_id/reviews", reviewCtrl.userreview);
 // 예시: 특정 식당의 리뷰 목록 조회
 app.get("/api/v1/restaurants/:restaurant_id/reviews", reviewCtrl.restreview);
 
-// Hello World! 엔드포인트
+// dashboard
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });

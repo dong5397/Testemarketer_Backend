@@ -6,6 +6,14 @@ CREATE TABLE users (
    password CHAR(100) NOT NULL
 );
 
+CREATE TABLE users(
+   user_id uuid PRIMARY KEY DEFAULT
+   uuid_generate_v4(),
+   user_name VARCHAR(255) NOT NULL,
+   user_email VARCHAR(255) NOT NULL,
+   user_password VARCHAR(255) NOT NULL,
+)
+
 -- restaurants 테이블 생성
 CREATE TABLE restaurants (
    restaurants_id SERIAL PRIMARY KEY,
