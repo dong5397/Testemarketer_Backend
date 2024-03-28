@@ -11,7 +11,8 @@ import userCtrl from "./app/src/User/user.ctrl.js";
 import cookieParser from "cookie-parser";
 import loginCtrl from "./app/src/Login/login.ctrl.js";
 import validinfo from "./app/src/User/validinfo.js";
-
+import authorization from "./app/src/User/authorization.js";
+import dashboard from "./app/src/User/dashboard.js";
 const { Pool } = pkg;
 /* 
 Postgres cluster makterback2db created
@@ -33,6 +34,9 @@ const pool = new Pool({
 
 const app = express();
 dotenv.config();
+
+// dashboard route
+app.use("/dashboard", dashboard);
 
 // 기본 설정
 app.use(express.json());
@@ -83,7 +87,15 @@ app.get("/api/v1/users/:user_id/reviews", reviewCtrl.userreview);
 // 예시: 특정 식당의 리뷰 목록 조회
 app.get("/api/v1/restaurants/:restaurant_id/reviews", reviewCtrl.restreview);
 
-// dashboard
+app.get("/is-verify", authorization, async (req, res) => {
+  try {
+    res.json(true);
+  } catch (arr) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
