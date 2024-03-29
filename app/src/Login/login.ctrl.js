@@ -22,17 +22,17 @@ const login = async (req, res, next) => {
     // 3. 비밀번호 일치 확인
     const validPassword = await bcrypt.compare(password, rows[0].user_password);
 
-    if (!validPassword) {
-      return res.status(401).json("비밀번호 혹은 계정이 일치하지 않습니다.");
+    if(!validPassword) {
+     return res.status(401).json("비밀번호 혹은 계정이 일치하지 않습니다.")
     }
 
     // 4. JWT 토큰 발급
-    const token = jwtGenerator(rows[0].user_id);
+    const token = jwtGenerator(rows[0].user_id)
 
     res.json({
       resultCode: "S-1",
       msg: "성공",
-      token,
+      token
     });
   } catch (error) {
     console.error(error);
@@ -40,45 +40,7 @@ const login = async (req, res, next) => {
   }
 };
 
-const accesstoken = async (req, res) => {
-  try {
-    const token = req.cookies.accessToken;
-    const data = jwt.verify(token, process.env.ACCESS_SECRET);
-    const { password, ...userData } = data;
-    res.status(200).json(userData);
-  } catch (error) {
-    console.error(error);
-    res.status(403).json("Invalid or expired access token");
-  }
-};
 
-const refreshToken = async (req, res) => {
-  try {
-    const token = req.cookies.refreshToken;
-    const data = jwt.verify(token, process.env.REFRECH_SECRET);
-    const { password, ...userData } = data;
-    const accessToken = jwt.sign(userData, process.env.ACCESS_SECRET, {
-      expiresIn: "1m",
-      issuer: "About Tech",
-    });
-    res.cookie("accessToken", accessToken, { httpOnly: true });
-    res.status(200).json("Access token renewed");
-  } catch (error) {
-    console.error(error);
-    res.status(403).json("Invalid or expired refresh token");
-  }
-};
-
-const loginSuccess = async (req, res) => {
-  try {
-    const token = req.cookies.accessToken;
-    const data = jwt.verify(token, process.env.ACCESS_SECRET);
-    res.status(200).json(data);
-  } catch (error) {
-    console.error(error);
-    res.status(403).json("Invalid or expired access token");
-  }
-};
 
 const logout = (req, res) => {
   try {

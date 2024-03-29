@@ -1,18 +1,19 @@
 -- users 테이블 생성
-CREATE TABLE users (
-   user_id SERIAL PRIMARY KEY,
-   username CHAR(100) NOT NULL,
-   email CHAR(100) NOT NULL,
-   password CHAR(100) NOT NULL
-);
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE users(
    user_id uuid PRIMARY KEY DEFAULT
    uuid_generate_v4(),
    user_name VARCHAR(255) NOT NULL,
    user_email VARCHAR(255) NOT NULL,
-   user_password VARCHAR(255) NOT NULL,
-)
+   user_password VARCHAR(255) NOT NULL
+);
+
+-- 가짜 유저 삽입 
+insert into users (user_name, user_email,user_password) values ('김헨리','henry123@naver.com', '1234')
+
+-- 유저 조회
+select * from users;
 
 -- restaurants 테이블 생성
 CREATE TABLE restaurants (
