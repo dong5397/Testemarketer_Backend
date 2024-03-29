@@ -84,7 +84,6 @@ const selectuser = async (req, res) => {
   }
 };
 
-
 export default {
   makeuser,
   selectusers,

@@ -22,25 +22,23 @@ const login = async (req, res, next) => {
     // 3. 비밀번호 일치 확인
     const validPassword = await bcrypt.compare(password, rows[0].user_password);
 
-    if(!validPassword) {
-     return res.status(401).json("비밀번호 혹은 계정이 일치하지 않습니다.")
+    if (!validPassword) {
+      return res.status(401).json("비밀번호 혹은 계정이 일치하지 않습니다.");
     }
 
     // 4. JWT 토큰 발급
-    const token = jwtGenerator(rows[0].user_id)
+    const token = jwtGenerator(rows[0].user_id);
 
     res.json({
       resultCode: "S-1",
       msg: "성공",
-      token
+      token,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json("Internal Server Error");
   }
 };
-
-
 
 const logout = (req, res) => {
   try {
@@ -53,4 +51,4 @@ const logout = (req, res) => {
   }
 };
 
-export default { login, accesstoken, refreshToken, loginSuccess, logout };
+export default { login, logout };

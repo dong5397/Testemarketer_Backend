@@ -40,10 +40,10 @@ app.use("/dashboard", dashboard);
 
 // 기본 설정
 app.use(express.json());
-app.use(cookieParser());
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:5174",
     methods: ["GET", "POST"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"], // 추가된 부분: 허용되는 헤더 목록
@@ -52,9 +52,6 @@ app.use(
 
 // 로그인 처리 엔드포인트
 app.post("/api/v1/login", validinfo, loginCtrl.login);
-app.get("/api/v1/accesstoken", loginCtrl.accesstoken);
-app.get("/api/v1/refreshtoken", loginCtrl.refreshToken);
-app.get("/api/v1/login/success", loginCtrl.loginSuccess);
 app.post("/api/v1/logout", loginCtrl.logout);
 
 // 예시: get 식당 정보 조회
