@@ -37,16 +37,24 @@ dotenv.config();
 
 // dashboard route
 app.use("/dashboard", dashboard);
-
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.header("Access-Control-Allow-Methods", "GET, POST");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, token"
+  );
+  next();
+});
 // 기본 설정
 app.use(express.json());
 
 app.use(
   cors({
-    origin: "http://localhost:5174",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"], // 추가된 부분: 허용되는 헤더 목록
+    allowedHeaders: ["Content-Type", "Authorization", "token"], // "token" 헤더를 허용합니다.
   })
 );
 
