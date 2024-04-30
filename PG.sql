@@ -23,17 +23,16 @@ CREATE TABLE restaurants (
    phone CHAR(100) NOT NULL,
    opening_hours CHAR(100) NOT NULL,
    rating FLOAT NOT NULL,
-   taste_level JSONB NOT NULL,
+   taste_level INT NOT NULL,
    image VARCHAR(255) NOT NULL,
    latitude DECIMAL(10, 8) NOT NULL,
    longitude DECIMAL(11, 8) NOT NULL
 );
 
-
 -- reviews 테이블 생성
 CREATE TABLE reviews (
    id SERIAL PRIMARY KEY,
-   restaurant_id INT NOT NULL REFERENCES restaurants(restaurants_id),
+   restaurants_id INT NOT NULL REFERENCES restaurants(restaurants_id),
    review_text VARCHAR(200) NOT NULL,
    review_date DATE NOT NULL,
    user_id uuid NOT NULL REFERENCES users(user_id)
@@ -51,7 +50,7 @@ CREATE TABLE posts (
    title CHAR(100) NOT NULL,
    content CHAR(100) NOT NULL,
    post_date CHAR(100) NOT NULL,
-   user_id INT NOT NULL REFERENCES users(user_id),
+   user_id uuid NOT NULL REFERENCES users(user_id),
    restaurants_id INT NOT NULL REFERENCES restaurants(restaurants_id)
 );
 
@@ -60,21 +59,23 @@ CREATE TABLE comments (
    id SERIAL PRIMARY KEY,
    comment_text CHAR(100) NOT NULL,
    comment_date CHAR(100) NOT NULL,
-   user_id INT NOT NULL REFERENCES users(user_id),
+   user_id uuid NOT NULL REFERENCES users(user_id),
    post_id INT NOT NULL REFERENCES posts(post_id)
 );
 
 -- restaurants 테이블에 데이터 삽입
 INSERT INTO restaurants (restaurants_name, address, phone, opening_hours, rating, taste_level, image, latitude, longitude)
-VALUES ('대전 성심당', '대전광역시 중구', '042-1234-5678', '07:00 - 22:00', 4.8, '{"sweet": 5, "salty": 4, "sour": 3, "bitter": 2}', 'https://blog.lgchem.com/wp-content/uploads/2014/10/ssd_1030-1.jpg', 36.350412, 127.384548);
+VALUES ('대전 성심당', '대전광역시 중구', '042-1234-5678', '07:00 - 22:00', 4.8, 5, 'https://blog.lgchem.com/wp-content/uploads/2014/10/ssd_1030-1.jpg', 36.350412, 127.384548);
+
+INSERT INTO restaurants (restaurants_name, address, phone, opening_hours, rating, taste_level, image, latitude, longitude)
+VALUES ('대전 성심당', '대전광역시 중구', '042-1234-5678', '07:00 - 22:00', 4.8, 5, 'https://blog.lgchem.com/wp-content/uploads/2014/10/ssd_1030-1.jpg', 36.350412, 127.384548);
+
+INSERT INTO restaurants (restaurants_name, address, phone, opening_hours, rating, taste_level, image, latitude, longitude)
+VALUES ('이태리국시 본점', '대전 서구 둔산로31번길 31 2층', '042-485-0950', '11:30 - 22:00', 4.8, 5, 'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20230616_205%2F1686845894665KQdXt_JPEG%2FKakaoTalk_Photo_2023-06-16-01-17-32_007.jpeg', 36.353304, 127.377901);
 
 
 INSERT INTO restaurants (restaurants_name, address, phone, opening_hours, rating, taste_level, image, latitude, longitude)
-VALUES ('이태리국시 본점', '대전 서구 둔산로31번길 31 2층', '042-485-0950', '11:30 - 22:00', 4.8, '{"sweet": 2, "salty": 4, "sour": 2, "bitter": 2}', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20230616_205%2F1686845894665KQdXt_JPEG%2FKakaoTalk_Photo_2023-06-16-01-17-32_007.jpeg', 36.353304, 127.377901);
-
-
-INSERT INTO restaurants (restaurants_name, address, phone, opening_hours, rating, taste_level, image, latitude, longitude)
-VALUES ('신사우물갈비 대전점', '대전 서구 가장로87-1 1층', '042-522-3215', '12:00 - 23:00', 4.7, '{"sweet": 4, "salty": 4, "sour": 1, "bitter": 2}', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fpup-review-phinf.pstatic.net%2FMjAyNDAzMzBfMjQ2%2FMDAxNzExNzcxNDQ2NTU5.-INp7BzOoFPEI3tWcty53yYvAKRvzIP5PNjbqznJYi4g.cBcCir2e9kIBJQ7SEPBZWkNMtlnkUWBxcHl9QZo7iiQg.JPEG%2F20240330_125938.jpg.jpg', 36.376282, 127.508940);
+VALUES ('신사우물갈비 대전점', '대전 서구 가장로87-1 1층', '042-522-3215', '12:00 - 23:00', 4.7, 5, 'https://search.pstatic.net/common/?src=https%3A%2F%2Fpup-review-phinf.pstatic.net%2FMjAyNDAzMzBfMjQ2%2FMDAxNzExNzcxNDQ2NTU5.-INp7BzOoFPEI3tWcty53yYvAKRvzIP5PNjbqznJYi4g.cBcCir2e9kIBJQ7SEPBZWkNMtlnkUWBxcHl9QZo7iiQg.JPEG%2F20240330_125938.jpg.jpg', 36.376282, 127.508940);
 
 INSERT INTO restaurants (restaurants_name, address, phone, opening_hours, rating, taste_level, image, latitude, longitude)
 VALUES ('근돈', '대전 서구 도산로369번길 92 1층 근돈 본점', '0507-1392-5234', '16:00 - 23:30', 4.5, 5, 'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20230815_270%2F1692109919279qU5kP_JPEG%2FKakaoTalk_20230815_233011659_01.jpg', 36.340565, 127.389010);
@@ -134,7 +135,6 @@ VALUES ('열혈충주갈비', '대전 서구 둔산중로40번길 31 102호', '0
 
 INSERT INTO restaurants (restaurants_name, address, phone, opening_hours, rating, taste_level, image, latitude, longitude)
 VALUES ('애프터글로우', '대전 서구 계룡로 391 201호', '0507-1460-0884', '11:30 - 21:00', 4.8, 5, 'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20230518_227%2F1684375622932f2qIx_JPEG%2F304BD82B-EA35-4487-A0E7-14C7640581D5.jpeg', 36.351607,127.371710  );
-
 
 
 -- restaurants 테이블에서 특정 데이터 삭제

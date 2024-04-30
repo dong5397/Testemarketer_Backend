@@ -15,18 +15,18 @@ import authorization from "./app/src/User/authorization.js";
 import dashboard from "./app/src/User/dashboard.js";
 const { Pool } = pkg;
 /* 
-Postgres cluster makterback2db created
+Postgres cluster maketerbackendtest created
   Username:    postgres
-  Password:    1nX7mGNmv0HsbSZ
-  Hostname:    makterback2db.internal
-  Flycast:     fdaa:5:35c8:0:1::16
+  Password:    q6h0Ys934HfVyJB
+  Hostname:    maketerbackendtest.internal
+  Flycast:     fdaa:5:35ca:0:1::33
   Proxy port:  5432
   Postgres port:  5433
-  Connection string: postgres://postgres:1nX7mGNmv0HsbSZ@makterback2db.flycast:5432
+  Connection string: postgres://postgres:q6h0Ys934HfVyJB@maketerbackendtest.flycast:5432
 */
 const pool = new Pool({
   user: "postgres",
-  password: "1nX7mGNmv0HsbSZ",
+  password: "q6h0Ys934HfVyJB",
   host: "127.0.0.1",
   database: "postgres",
   port: 5432,
