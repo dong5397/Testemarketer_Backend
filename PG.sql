@@ -143,3 +143,7 @@ DROP TABLE restaurants CASCADE;
 
 -- users 테이블 삭제 (IF EXISTS 옵션 사용하여 테이블이 존재하는 경우에만 삭제)
 DROP TABLE IF EXISTS users CASCADE;
+
+UPDATE restaurants
+SET phone = '042-539-8148'
+WHERE restaurants_name = '금복집';
