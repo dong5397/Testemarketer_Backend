@@ -13,6 +13,7 @@ import loginCtrl from "./app/src/Login/login.ctrl.js";
 import validinfo from "./app/src/User/validinfo.js";
 import authorization from "./app/src/User/authorization.js";
 import dashboard from "./app/src/User/dashboard.js";
+import CumintyCtrl from "./app/src/Cuminte/Cuminty.ctrl.js";
 const { Pool } = pkg;
 /* 
 Postgres cluster maketerbackteste2 created
@@ -91,14 +92,34 @@ app.get("/api/v1/users/:user_id/reviews", reviewCtrl.userreview);
 // 예시: 특정 식당의 리뷰 목록 조회
 app.get("/api/v1/restaurants/:restaurant_id/reviews", reviewCtrl.restreview);
 
-app.get("/is-verify", authorization, async (req, res) => {
-  try {
-    res.json(true);
-  } catch (arr) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
-  }
-});
+// 다건
+app.post("/api/v1/post", CumintyCtrl.posts);
+
+//단건
+app.post("/api/v1/post/:post_id", CumintyCtrl.post);
+
+//포스터 생성
+app.post("/api/v1/post/", CumintyCtrl.createpost);
+
+//포스터 수정
+app.post("/api/v1/post/:post_id", CumintyCtrl.remotepost);
+
+//포스터 삭제
+app.post("/api/v1/post/:post_id", CumintyCtrl.deletepost);
+
+//유저 포스터
+app.post("/api/v1/post/:post_id", CumintyCtrl.userpost);
+
+deletepost,
+  userpost,
+  app.get("/is-verify", authorization, async (req, res) => {
+    try {
+      res.json(true);
+    } catch (arr) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+  });
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
