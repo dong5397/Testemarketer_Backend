@@ -16,17 +16,17 @@ import dashboard from "./app/src/User/dashboard.js";
 import CumintyCtrl from "./app/src/Cuminte/Cuminty.ctrl.js";
 const { Pool } = pkg;
 /* 
-Postgres cluster maketerbackteste2 created
+Postgres cluster maketerbackendtest created
   Username:    postgres
-  Password:    UQ2GxV2HkDXwc4D
-  Hostname:    maketerbackteste2.internal
-  Flycast:     fdaa:5:35ca:0:1::38
+  Password:    Q9rjRsnDJusBhDi
+  Hostname:    maketerbackendtest.internal
+  Flycast:     fdaa:5:35ca:0:1::3e
   Proxy port:  5432
   Postgres port:  5433
-  Connection string: postgres://postgres:UQ2GxV2HkDXwc4D@maketerbackteste2.flycast:5432*/
+  Connection string: postgres://postgres:Q9rjRsnDJusBhDi@maketerbackendtest.flycast:5432*/
 const pool = new Pool({
   user: "postgres",
-  password: "UQ2GxV2HkDXwc4D",
+  password: "Q9rjRsnDJusBhDi",
   host: "127.0.0.1",
   database: "postgres",
   port: 5432,
@@ -104,22 +104,17 @@ app.post("/api/v1/post/", CumintyCtrl.createpost);
 //포스터 수정
 app.post("/api/v1/post/:post_id", CumintyCtrl.remotepost);
 
-//포스터 삭제
-app.post("/api/v1/post/:post_id", CumintyCtrl.deletepost);
+// 포스터 삭제
+app.delete("/api/v1/post/:post_id", CumintyCtrl.deletepost);
 
-//유저 포스터
-app.post("/api/v1/post/:post_id", CumintyCtrl.userpost);
-
-deletepost,
-  userpost,
-  app.get("/is-verify", authorization, async (req, res) => {
-    try {
-      res.json(true);
-    } catch (arr) {
-      console.error(err.message);
-      res.status(500).send("Server Error");
-    }
-  });
+app.get("/is-verify", authorization, async (req, res) => {
+  try {
+    res.json(true);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
