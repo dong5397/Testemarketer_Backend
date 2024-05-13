@@ -35,26 +35,25 @@ const pool = new Pool({
 const app = express();
 dotenv.config();
 
-// dashboard route
 app.use("/dashboard", dashboard);
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:5173");
-  res.header("Access-Control-Allow-Methods", "GET, POST");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.header(
     "Access-Control-Allow-Headers",
     "Content-Type, Authorization, token"
   );
   next();
 });
-// 기본 설정
-app.use(express.json());
 
+app.use(express.json());
+app.use(cookieParser());
 app.use(
   cors({
     origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization", "token"], // "token" 헤더를 허용합니다.
+    allowedHeaders: ["Content-Type", "Authorization", "token"],
   })
 );
 
@@ -62,51 +61,52 @@ app.use(
 app.post("/api/v1/login", validinfo, loginCtrl.login);
 app.post("/api/v1/logout", loginCtrl.logout);
 
-// 예시: get 식당 정보 조회
+// 식당 정보 다건 조회
 app.get("/api/v1/restaurants", restCtrl.restrs);
 
-// 예시: 식당 단건 조회
+// 식당 단건 조회
 app.get("/api/v1/restaurants/:restaurants_id", restCtrl.restr);
 
-// 예시: 사용자 정보 다건 조회
+// 사용자 정보 다건 조회
 app.get("/api/v1/users", userCtrl.selectusers);
 
-// 예시: 사용자 정보 단건 조회
+// 사용자 정보 단건 조회
 app.get("/api/v1/users/:user_id", userCtrl.selectuser);
 
-// 예시: 사용자 정보 생성
+// 사용자 정보 생성
 app.post("/api/v1/register", validinfo, userCtrl.makeuser);
 
-// 예시: 리뷰 생성
+// 리뷰 생성
 app.post("/api/v1/reviews", reviewCtrl.createreview);
 
-// 예시: 리뷰 수정
+// 리뷰 수정
 app.put("/api/v1/reviews/:review_id", reviewCtrl.remotereview);
 
-// 예시: 리뷰 삭제
+// 리뷰 삭제
 app.delete("/api/v1/reviews/:review_id", reviewCtrl.deletereview);
 
-// 예시: 사용자의 리뷰 목록 조회
+// 사용자의 리뷰 목록 조회
 app.get("/api/v1/users/:user_id/reviews", reviewCtrl.userreview);
 
-// 예시: 특정 식당의 리뷰 목록 조회
+// 특정 식당의 리뷰 목록 조회
 app.get("/api/v1/restaurants/:restaurant_id/reviews", reviewCtrl.restreview);
 
-// 다건
-app.post("/api/v1/post", CumintyCtrl.posts);
+// 커뮤니티 포스트 다건 조회
+app.get("/api/v1/posts", CumintyCtrl.posts);
 
-//단건
-app.post("/api/v1/post/:post_id", CumintyCtrl.post);
+// 커뮤니티 포스트 단건 조회
+app.get("/api/v1/post/:post_id", CumintyCtrl.post);
 
-//포스터 생성
-app.post("/api/v1/post/", CumintyCtrl.createpost);
+// 커뮤니티 포스트 생성
+app.post("/api/v1/post", CumintyCtrl.createpost);
 
-//포스터 수정
-app.post("/api/v1/post/:post_id", CumintyCtrl.remotepost);
+// 커뮤니티 포스트 수정
+app.put("/api/v1/post/:post_id", CumintyCtrl.remotepost);
 
-// 포스터 삭제
+// 커뮤니티 포스트 삭제
 app.delete("/api/v1/post/:post_id", CumintyCtrl.deletepost);
 
+// 유효성 검증
 app.get("/is-verify", authorization, async (req, res) => {
   try {
     res.json(true);

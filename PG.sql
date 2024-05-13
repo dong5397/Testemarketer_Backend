@@ -67,13 +67,13 @@ create table reviews_hashtags (
 -- posts 테이블 생성
 CREATE TABLE posts (
    post_id SERIAL PRIMARY KEY,
-   title CHAR(100) NOT NULL,
-   content CHAR(100) NOT NULL,
-   post_date CHAR(100) NOT NULL,
-   user_id uuid NOT NULL REFERENCES users(user_id),
-   restaurants_id INT NOT NULL REFERENCES restaurants(restaurants_id)
+   title VARCHAR(100) NOT NULL,
+   content TEXT NOT NULL,
+   post_date TIMESTAMP NOT NULL
 );
+SELECT * FROM posts;
 
+INSERT INTO posts (title, content, post_date) VALUES ('테스트 제목', '테스트 내용', '2023-05-11T12:00:00Z') RETURNING *;
 -- comments 테이블 생성
 CREATE TABLE comments (
    id SERIAL PRIMARY KEY,
@@ -143,7 +143,7 @@ DELETE FROM restaurants
 WHERE restaurants_name = '대전 성심당';
 
 -- restaurants 테이블의 모든 데이터 조회
-SELECT * FROM restaurants;
+SELECT * FROM posts;
 
 SELECT * FROM users where email = 'alsrl6678@naver.com';
 

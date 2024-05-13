@@ -1,10 +1,10 @@
-import pkg from "pg";
 import { pool } from "../../../app.js";
-//다건
+
+// 다건 조회
 const posts = async (req, res) => {
   try {
     const { rows } = await pool.query("SELECT * FROM posts");
-    console.log(rows);
+    console.log("Posts Query Result:", rows); // 쿼리 결과 확인을 위한 로그
     res.json({
       resultCode: "S-1",
       msg: "성공",
@@ -18,13 +18,16 @@ const posts = async (req, res) => {
     });
   }
 };
+
+// 단건 조회
 const post = async (req, res) => {
   try {
-    const id = req.params.post.id;
+    const { post_id } = req.params;
     const { rows } = await pool.query(
       "SELECT * FROM posts WHERE post_id = $1",
-      [id]
+      [post_id]
     );
+    console.log("Single Post Query Result:", rows); // 쿼리 결과 확인을 위한 로그
     res.json({
       resultCode: "S-1",
       msg: "성공",
@@ -38,21 +41,34 @@ const post = async (req, res) => {
     });
   }
 };
+
+// 생성
 const createpost = async (req, res) => {
   try {
     const { post_title, post_content, post_date } = req.body;
-    const { rows } = await pool.query(
-      `
-        INSERT INTO posts (title, content, post_date) 
-        VALUES ($1, $2, $3)
-        RETURNING *
-      `,
-      [post_title, post_content, post_date]
-    );
+    console.log("Received Data:", req.body); // 입력 값 확인을 위한 로그
+
+    const query = `
+      INSERT INTO posts (title, content, post_date)
+      VALUES ($1, $2, $3)
+      RETURNING *
+    `;
+    const values = [post_title, post_content, post_date];
+
+    const { rows } = await pool.query(query, values);
+    console.log("Query Result:", rows); // 쿼리 결과 확인을 위한 로그
+
+    if (rows.length === 0) {
+      return res.status(400).json({
+        resultCode: "F-2",
+        msg: "글 작성 실패",
+      });
+    }
+
     res.json({
       resultCode: "S-1",
       msg: "성공",
-      data: rows,
+      data: rows[0],
     });
   } catch (error) {
     console.error(error);
@@ -63,23 +79,33 @@ const createpost = async (req, res) => {
   }
 };
 
+// 수정
 const remotepost = async (req, res) => {
   try {
     const { id } = req.params;
-    const { post_id, post_title, post_content, post_date, user_id } = req.body;
-    const { rows } = await pool.query(
-      `
-        UPDATE posts 
-        SET post_id = $1, post_title = $2, post_content = $3, post_date = $4
-        WHERE id = $5
-        RETURNING *
-        `,
-      [post_id, post_title, post_content, post_date, id]
-    );
+    const { post_id, post_title, post_content, post_date } = req.body;
+    const query = `
+      UPDATE posts
+      SET post_id = $1, title = $2, content = $3, post_date = $4
+      WHERE post_id = $5
+      RETURNING *
+    `;
+    const values = [post_id, post_title, post_content, post_date, id];
+
+    const { rows } = await pool.query(query, values);
+    console.log("Update Query Result:", rows); // 쿼리 결과 확인을 위한 로그
+
+    if (rows.length === 0) {
+      return res.status(400).json({
+        resultCode: "F-2",
+        msg: "글 수정 실패",
+      });
+    }
+
     res.json({
       resultCode: "S-1",
       msg: "성공",
-      data: rows,
+      data: rows[0],
     });
   } catch (error) {
     console.error(error);
@@ -90,6 +116,7 @@ const remotepost = async (req, res) => {
   }
 };
 
+// 삭제
 const deletepost = async (req, res) => {
   try {
     const { post_id } = req.params;
@@ -97,6 +124,7 @@ const deletepost = async (req, res) => {
       "DELETE FROM posts WHERE post_id = $1 RETURNING *",
       [post_id]
     );
+    console.log("Delete Query Result:", rows); // 삭제 결과 확인을 위한 로그
 
     if (rows.length > 0) {
       res.json({
@@ -118,28 +146,6 @@ const deletepost = async (req, res) => {
     });
   }
 };
-
-//사용자 리뷰
-// const userpost = async (req, res) => {
-//   try {
-//     const { user_id } = req.params;
-//     const { rows } = await pool.query(
-//       "SELECT * FROM reviews WHERE user_id = $1",
-//       [user_id]
-//     );
-//     res.json({
-//       resultCode: "S-1",
-//       msg: "성공",
-//       data: rows,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({
-//       resultCode: "F-1",
-//       msg: "에러 발생",
-//     });
-//   }
-// };
 
 export default {
   posts,
