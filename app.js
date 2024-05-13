@@ -16,17 +16,17 @@ import dashboard from "./app/src/User/dashboard.js";
 import CumintyCtrl from "./app/src/Cuminte/Cuminty.ctrl.js";
 const { Pool } = pkg;
 /* 
-Postgres cluster maketerbackendtest created
+Postgres cluster maketerdbtest created
   Username:    postgres
-  Password:    Q9rjRsnDJusBhDi
-  Hostname:    maketerbackendtest.internal
-  Flycast:     fdaa:5:35ca:0:1::3e
+  Password:    UKDaakW5ryQN47n
+  Hostname:    maketerdbtest.internal
+  Flycast:     fdaa:5:35ca:0:1::41
   Proxy port:  5432
   Postgres port:  5433
-  Connection string: postgres://postgres:Q9rjRsnDJusBhDi@maketerbackendtest.flycast:5432*/
+  Connection string: postgres://postgres:UKDaakW5ryQN47n@maketerdbtest.flycast:5432*/
 const pool = new Pool({
   user: "postgres",
-  password: "Q9rjRsnDJusBhDi",
+  password: "UKDaakW5ryQN47n",
   host: "127.0.0.1",
   database: "postgres",
   port: 5432,
