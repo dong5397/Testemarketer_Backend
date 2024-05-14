@@ -16,17 +16,17 @@ import dashboard from "./app/src/User/dashboard.js";
 import CumintyCtrl from "./app/src/Cuminte/Cuminty.ctrl.js";
 const { Pool } = pkg;
 /* 
-Postgres cluster maketerdbtest created
+Postgres cluster maketertest5 created
   Username:    postgres
-  Password:    UKDaakW5ryQN47n
-  Hostname:    maketerdbtest.internal
-  Flycast:     fdaa:5:35ca:0:1::41
+  Password:    iNkNuv4PHw6erVY
+  Hostname:    maketertest5.internal
+  Flycast:     fdaa:5:35ca:0:1::45
   Proxy port:  5432
   Postgres port:  5433
-  Connection string: postgres://postgres:UKDaakW5ryQN47n@maketerdbtest.flycast:5432*/
+  Connection string: postgres://postgres:iNkNuv4PHw6erVY@maketertest5.flycast:5432*/
 const pool = new Pool({
   user: "postgres",
-  password: "UKDaakW5ryQN47n",
+  password: "iNkNuv4PHw6erVY",
   host: "127.0.0.1",
   database: "postgres",
   port: 5432,
@@ -76,20 +76,25 @@ app.get("/api/v1/users/:user_id", userCtrl.selectuser);
 // 사용자 정보 생성
 app.post("/api/v1/register", validinfo, userCtrl.makeuser);
 
-// 리뷰 생성
+// 예시 : 특정 카테고리의 식당 정보 조회
+app.get("/api/v1/restaurants/category/:category", restCtrl.restr);
+
+// 예시: 리뷰 생성
 app.post("/api/v1/reviews", reviewCtrl.createreview);
 
-// 리뷰 수정
+// 예시: 리뷰 수정
 app.put("/api/v1/reviews/:review_id", reviewCtrl.remotereview);
 
-// 리뷰 삭제
+// 예시: 리뷰 삭제
 app.delete("/api/v1/reviews/:review_id", reviewCtrl.deletereview);
 
-// 사용자의 리뷰 목록 조회
-app.get("/api/v1/users/:user_id/reviews", reviewCtrl.userreview);
+// 식당별 리뷰 조회
+app.get("/api/v1/reviews/:restaurant_id", reviewCtrl.getReviews);
 
-// 특정 식당의 리뷰 목록 조회
-app.get("/api/v1/restaurants/:restaurant_id/reviews", reviewCtrl.restreview);
+// 예시: 특정 식당의 리뷰 목록 조회
+app.get("/api/v1/restaurants/reviews", reviewCtrl.restreview);
+
+app.get("/api/tags", reviewCtrl.getHashtags);
 
 // 커뮤니티 포스트 다건 조회
 app.get("/api/v1/posts", CumintyCtrl.posts);
