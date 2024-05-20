@@ -27,25 +27,18 @@ CREATE TABLE restaurants (
    phone CHAR(100) NOT NULL,
    opening_hours CHAR(100) NOT NULL,
    rating FLOAT NOT NULL,
-   Spicy INT NOT NULL,
-   Sweet INT NOT NULL,
-   Sour INT NOT NULL,
-   Salty INT NOT NULL,
+   Spicy FLOAT NOT NULL,
+   Sweet FLOAT NOT NULL,
+   Sour FLOAT NOT NULL,
+   Salty FLOAT NOT NULL,
    food_type CHAR(20) NOT NULL,
    image VARCHAR(255) NOT NULL,
    latitude DECIMAL(10, 8) NOT NULL,
-   longitude DECIMAL(11, 8) NOT NULL
+   longitude DECIMAL(11, 8) NOT NULL,
+   category VARCHAR(100),
+   food_menu JSONB;
 );
--- 식당의 카테고리 (category) 판매메뉴 (food_menu)  
-ALTER TABLE restaurants
-ADD category VARCHAR(100),
-ADD food_menu JSONB;
 
-
--- 식당의 카테고리 (category) 판매메뉴 (food_menu)  
-ALTER TABLE restaurants
-ADD category VARCHAR(100),
-ADD food_menu JSONB;
 
 
 -- reviews 테이블 생성
@@ -86,12 +79,7 @@ VALUES ('delicious');
 INSERT INTO reviews_hashtags (reviews_id, hashtags_id)
 VALUES (1, 1);
 
--- 리뷰 샘플 데이터 삽입
-INSERT INTO reviews (username, contents, date, rating, restaurant_id)
-VALUES 
-('John Doe', 'This restaurant is amazing!', '2024-04-12', 4.5, 1),
-('Jane Smith', 'The food was too spicy.', '2024-05-01', 3.0, 2),
-('Mark Davis', 'Loved the dessert options!', '2024-05-10', 4.8, 3);
+
 
 -- 작성된 리뷰조회 
 SELECT 

@@ -39,8 +39,32 @@ const restr = async (req, res) => {
       msg: "에러 발생",
     });
   }
+}; // 특정 카테고리의 식당 데이터를 반환하는 엔드포인트
+const restc = async (req, res) => {
+  const category = req.params.category;
+
+  try {
+    const { rows } = await pool.query(
+      "SELECT * FROM restaurants WHERE category = $1::text",
+      [category]
+    );
+
+    res.json({
+      resultCode: "S-1",
+      msg: "성공",
+      data: rows,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      resultCode: "F-1",
+      msg: "에러 발생",
+    });
+  }
 };
+
 export default {
   restrs,
   restr,
+  restc,
 };

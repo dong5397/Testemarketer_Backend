@@ -16,17 +16,17 @@ import dashboard from "./app/src/User/dashboard.js";
 import CumintyCtrl from "./app/src/Cuminte/Cuminty.ctrl.js";
 const { Pool } = pkg;
 /* 
-Postgres cluster maketertest5 created
+Postgres cluster maketerbackendtest4 created
   Username:    postgres
-  Password:    iNkNuv4PHw6erVY
-  Hostname:    maketertest5.internal
-  Flycast:     fdaa:5:35ca:0:1::45
+  Password:    vHKL4uxhvJ0irRH
+  Hostname:    maketerbackendtest4.internal
+  Flycast:     fdaa:5:35ca:0:1::4f
   Proxy port:  5432
   Postgres port:  5433
-  Connection string: postgres://postgres:iNkNuv4PHw6erVY@maketertest5.flycast:5432*/
+  Connection string: postgres://postgres:vHKL4uxhvJ0irRH@maketerbackendtest4.flycast:5432*/
 const pool = new Pool({
   user: "postgres",
-  password: "iNkNuv4PHw6erVY",
+  password: "vHKL4uxhvJ0irRH",
   host: "127.0.0.1",
   database: "postgres",
   port: 5432,
@@ -77,7 +77,7 @@ app.get("/api/v1/users/:user_id", userCtrl.selectuser);
 app.post("/api/v1/register", validinfo, userCtrl.makeuser);
 
 // 예시 : 특정 카테고리의 식당 정보 조회
-app.get("/api/v1/restaurants/category/:category", restCtrl.restr);
+app.get("/api/v1/restaurants/category/:category", restCtrl.restc);
 
 // 예시: 리뷰 생성
 app.post("/api/v1/reviews", reviewCtrl.createreview);
