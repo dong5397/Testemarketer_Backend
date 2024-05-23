@@ -3,6 +3,7 @@ import cors from "cors";
 import pkg from "pg";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import path from "path";
 
 // 컨트롤러 임포트
 import restCtrl from "./app/src/restaurants/restaurants.ctrl.js";
@@ -14,20 +15,13 @@ import validinfo from "./app/src/User/validinfo.js";
 import authorization from "./app/src/User/authorization.js";
 import dashboard from "./app/src/User/dashboard.js";
 import CumintyCtrl from "./app/src/Cuminte/Cuminty.ctrl.js";
+
 const { Pool } = pkg;
-/* 
-Postgres cluster maketerbackendtest4 created
-  Username:    postgres
-  Password:    vHKL4uxhvJ0irRH
-  Hostname:    maketerbackendtest4.internal
-  Flycast:     fdaa:5:35ca:0:1::4f
-  Proxy port:  5432
-  Postgres port:  5433
-  Connection string: postgres://postgres:vHKL4uxhvJ0irRH@maketerbackendtest4.flycast:5432*/
+
 const pool = new Pool({
   user: "postgres",
-  password: "vHKL4uxhvJ0irRH",
-  host: "127.0.0.1",
+  password: "jOnzPkg5V1zCvam",
+  host: "maketerbackendtest2.flycast",
   database: "postgres",
   port: 5432,
 });
@@ -36,6 +30,7 @@ const app = express();
 dotenv.config();
 
 app.use("/dashboard", dashboard);
+
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:5173");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
@@ -50,12 +45,15 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization", "token"],
   })
 );
+
+// 정적 파일 제공 설정
+app.use(express.static(path.join(__dirname, "public")));
 
 // 로그인 처리 엔드포인트
 app.post("/api/v1/login", validinfo, loginCtrl.login);
