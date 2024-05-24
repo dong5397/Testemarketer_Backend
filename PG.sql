@@ -20,36 +20,38 @@ select * from users;
 -- restaurants 테이블 생성
 
 
+-- restaurants 테이블 생성
 CREATE TABLE restaurants (
    restaurants_id SERIAL PRIMARY KEY,
-   restaurants_name CHAR(100) NOT NULL,
-   address CHAR(100) NOT NULL,
-   phone CHAR(100) NOT NULL,
-   opening_hours CHAR(100) NOT NULL,
+   restaurants_name VARCHAR(100) NOT NULL,
+   address VARCHAR(100) NOT NULL,
+   phone VARCHAR(100) NOT NULL,
+   opening_hours VARCHAR(100) NOT NULL,
    rating FLOAT NOT NULL,
-   Spicy FLOAT NOT NULL,
-   Sweet FLOAT NOT NULL,
-   Sour FLOAT NOT NULL,
-   Salty FLOAT NOT NULL,
-   food_type CHAR(20) NOT NULL,
+   spicy FLOAT NOT NULL,
+   sweet FLOAT NOT NULL,
+   sour FLOAT NOT NULL,
+   salty FLOAT NOT NULL,
+   food_type VARCHAR(20) NOT NULL,
    image VARCHAR(255) NOT NULL,
    latitude DECIMAL(10, 8) NOT NULL,
    longitude DECIMAL(11, 8) NOT NULL,
    category VARCHAR(100),
-   food_menu JSONB;
+   food_menu JSONB
 );
-
-
 
 -- reviews 테이블 생성
 CREATE TABLE reviews (
    id SERIAL PRIMARY KEY,
    username VARCHAR(100) NOT NULL,
-   contents text NOT NULL,
-   date DATE NOT NULL,
-   rating numeric not null,
-   restaurant_id INT NOT NULL REFERENCES restaurants(restaurants_id)
+   contents TEXT NOT NULL,
+   review_date DATE NOT NULL,
+   rating NUMERIC NOT NULL,
+   restaurants_id INT NOT NULL REFERENCES restaurants(restaurants_id)
 );
+
+-- 인덱스 생성
+CREATE INDEX idx_reviews_restaurants_id ON reviews(restaurants_id);
 
 
 -- hashtags(해시태그) 테이블 생성
@@ -64,38 +66,8 @@ create table reviews_hashtags (
 	foreign key (reviews_id) references reviews(id) on delete cascade,
 	FOREIGN KEY (hashtags_id) REFERENCES hashtags(id) ON DELETE CASCADE
 )
--- 리뷰 테이블에 샘플 데이터 삽입
-INSERT INTO reviews (username, contents, date, rating, restaurant_id)
-VALUES ('John Doe', 'This restaurant is amazing!', '2024-04-12', 4.5, 1);
 
 
--- 해시태그 테이블에 샘플 데이터 삽입
-INSERT INTO hashtags (contents)
-VALUES ('delicious');
-
-
-
--- 리뷰-해시태그 매핑 테이블에 샘플 데이터 삽입
-INSERT INTO reviews_hashtags (reviews_id, hashtags_id)
-VALUES (1, 1);
-
-
-
--- 작성된 리뷰조회 
-SELECT 
-    r.id AS review_id,
-    r.username,
-    r.contents AS review_contents,
-    r.date AS review_date,
-    r.rating,
-    r.restaurant_id,
-    h.contents AS hashtag
-FROM 
-    reviews as r
-INNER JOIN
-    reviews_hashtags as rh ON r.id = rh.reviews_id
-INNER JOIN
-    hashtags as h ON rh.hashtags_id = h.id;
 
 -- posts 테이블 생성
 CREATE TABLE posts (
@@ -106,18 +78,18 @@ CREATE TABLE posts (
 );
 SELECT * FROM posts;
 
-INSERT INTO posts (title, content, post_date) VALUES ('테스트 제목', '테스트 내용', '2023-05-11T12:00:00Z') RETURNING *;
--- comments 테이블 생성
+-- 댓글
 CREATE TABLE comments (
    id SERIAL PRIMARY KEY,
-   comment_text CHAR(100) NOT NULL,
-   comment_date CHAR(100) NOT NULL,
-   user_id uuid NOT NULL REFERENCES users(user_id),
+   comment_text TEXT NOT NULL,
+   comment_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
    post_id INT NOT NULL REFERENCES posts(post_id)
 );
+CREATE INDEX idx_comments_post_id ON comments(post_id);
+
 
 -- restaurants 테이블에 데이터 삽입
-INSERT INTO restaurants (restaurants_name, address, phone, opening_hours, rating, Spicy, Sweet, Sour, Salty, food_type, image, latitude, longitude, food_menu, category) 
+INSERT INTO restaurants (restaurants_name, address, phone, opening_hours, rating, spicy, sweet, sour, salty, food_type, image, latitude, longitude, food_menu, category) 
 VALUES 
 ('대전 성심당', '대전광역시 중구', '042-1234-5678', '07:00 - 22:00', 4.8, 5, 5, 4, 4, 'Korean', 'https://blog.lgchem.com/wp-content/uploads/2014/10/ssd_1030-1.jpg', 36.350412, 127.384548, '{"menus":[{"name":"튀김소보루"},{"name":"작은 메아리"}]}', '디저트'),
 
