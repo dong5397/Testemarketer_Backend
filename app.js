@@ -18,14 +18,14 @@ import CumintyCtrl from "./app/src/Cuminte/Cuminty.ctrl.js";
 import CommentCtrl from "./app/src/Cuminte/Comments.ctrl.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-/*Postgres cluster maketerbackendpostgre created
+/*Postgres cluster maketerbackendnodebook created
   Username:    postgres
-  Password:    TuHfEiqjXSozWP1
-  Hostname:    maketerbackendpostgre.flycast
-  Flycast:     fdaa:5:35ca:0:1::59
+  Password:    cnzlwC9LnPbySwu
+  Hostname:    maketerbackendnodebook.internal
+  Flycast:     fdaa:5:35ca:0:1::5c
   Proxy port:  5432
   Postgres port:  5433
-  Connection string: postgres://postgres:TuHfEiqjXSozWP1@maketerbackendpostgre.flycast:5432 */
+  Connection string: postgres://postgres:cnzlwC9LnPbySwu@maketerbackendnodebook.flycast:5432 */
 const { Pool } = pkg;
 
 // 현재 모듈의 URL 가져오기
@@ -36,7 +36,7 @@ const __dirname = dirname(__filename);
 // PostgreSQL Pool 설정
 const pool = new Pool({
   user: "postgres",
-  password: "TuHfEiqjXSozWP1",
+  password: "cnzlwC9LnPbySwu",
   host: "127.0.0.1",
   database: "postgres",
   port: 5432,
@@ -132,11 +132,16 @@ app.get("/api/v1/comments", CommentCtrl.comments);
 app.get("/api/v1/comments/:commentId", CommentCtrl.comment);
 
 // 댓글 생성
-app.post("/api/v1/comment", CommentCtrl.createcomment);
+app.post("/api/v1/post/:post_id/comments", CommentCtrl.createcomment);
 
 // 댓글 삭제
-app.delete("/api/v1/post/:commentId", CommentCtrl.deletecomment);
+app.delete(
+  "/api/v1/post/:post_id/comments/:commentid",
+  CommentCtrl.deletecomment
+);
 
+// 특정 포스트에 대한 댓글 조회
+app.get("/api/v1/post/:postId/comments", CommentCtrl.getCommentsByPostId);
 // 유효성 검증
 app.get("/is-verify", authorization, async (req, res) => {
   try {
