@@ -3,7 +3,16 @@ import { pool } from "../../../app.js";
 // 다건 조회
 const posts = async (req, res) => {
   try {
-    const { rows } = await pool.query("SELECT * FROM posts");
+    const { title } = req.query;
+    let query = "SELECT * FROM posts";
+    let params = [];
+
+    if (title) {
+      query += " WHERE title ILIKE $1";
+      params.push(`%${title}%`);
+    }
+
+    const { rows } = await pool.query(query, params);
     console.log("Posts Query Result:", rows); // 쿼리 결과 확인을 위한 로그
     res.json({
       resultCode: "S-1",
@@ -18,7 +27,6 @@ const posts = async (req, res) => {
     });
   }
 };
-
 // 단건 조회
 const post = async (req, res) => {
   try {

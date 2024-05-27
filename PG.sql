@@ -80,7 +80,7 @@ SELECT * FROM posts;
 
 -- 댓글
 CREATE TABLE comments (
-   id SERIAL PRIMARY KEY,
+   commentid SERIAL PRIMARY KEY,
    comment_text TEXT NOT NULL,
    comment_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
    post_id INT NOT NULL REFERENCES posts(post_id)

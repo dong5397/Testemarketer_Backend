@@ -18,14 +18,14 @@ import CumintyCtrl from "./app/src/Cuminte/Cuminty.ctrl.js";
 import CommentCtrl from "./app/src/Cuminte/Comments.ctrl.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-/*Postgres cluster maketerbackendnodebook created
+/*Postgres cluster maketerbackendpostgre created
   Username:    postgres
-  Password:    cnzlwC9LnPbySwu
-  Hostname:    maketerbackendnodebook.internal
-  Flycast:     fdaa:5:35ca:0:1::5c
+  Password:    yMuWQ6WSePBmnPc
+  Hostname:    maketerbackendpostgre.internal
+  Flycast:     fdaa:5:35ca:0:1::5e
   Proxy port:  5432
   Postgres port:  5433
-  Connection string: postgres://postgres:cnzlwC9LnPbySwu@maketerbackendnodebook.flycast:5432 */
+  Connection string: postgres://postgres:yMuWQ6WSePBmnPc@maketerbackendpostgre.flycast:5432 */
 const { Pool } = pkg;
 
 // 현재 모듈의 URL 가져오기
@@ -36,7 +36,7 @@ const __dirname = dirname(__filename);
 // PostgreSQL Pool 설정
 const pool = new Pool({
   user: "postgres",
-  password: "cnzlwC9LnPbySwu",
+  password: "yMuWQ6WSePBmnPc",
   host: "127.0.0.1",
   database: "postgres",
   port: 5432,
